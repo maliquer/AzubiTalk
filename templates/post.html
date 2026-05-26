@@ -7,8 +7,7 @@
 
     <title>{{ post.title }}</title>
 
-    <link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -22,14 +21,13 @@ href="{{ url_for('static', filename='style.css') }}">
 
     </nav>
 
-    <main class="container">
+    <main class="post-page">
 
         <section class="posts">
 
             <a href="/" class="back-btn">
-                            Zurück
+                Zurück
             </a>
-
 
             <article class="post">
 
@@ -63,6 +61,46 @@ href="{{ url_for('static', filename='style.css') }}">
                 </div>
 
             </article>
+
+
+            <div class="comments-section">
+
+                <h3>Kommentare</h3>
+
+                <div class="comment-list">
+
+                    {% for comment in post.comments | default([]) %}
+                    <div class="comment">
+
+                        <strong>{{ comment.author }}</strong>
+
+                        <small>
+                            {{ comment.created_at | default("") }}
+                        </small>
+
+                        <p>{{ comment.text }}</p>
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+                <form action="/add-comment/{{ post.id }}" method="POST">
+
+                    <input type="text" name="author" placeholder="Dein Name..." required>
+
+                    <input type="text" name="comment" placeholder="Kommentar schreiben..." required>
+
+                    <button type="submit" class="publish-btn">
+
+                        Senden
+
+                    </button>
+
+                </form>
+
+            </div>
+
 
         </section>
 
