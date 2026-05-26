@@ -94,6 +94,37 @@ def upvote(post_id):
     save_posts(posts)
     return {"votes": post["votes"]}
 
+@app.route("/add-comment/<int:post_id>", methods=["POST"])
+def add_comment(post_id):
+
+    posts = load_posts()
+
+    comment_text = request.form["comment"]
+
+    for post in posts:
+
+        if post["id"] == post_id:
+
+            if "comments" not in post:
+                post["comments"] = []
+
+            author = request.form["author"]
+            
+            post["comments"].append({
+
+                "author": author,
+                "text": comment_text,
+                "created_at": datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+
+            })
+
+            post["answer_count"] += 1
+
+            break
+
+    save_posts(posts)
+
+    return redirect(f"/post/{post_id}")
 
 if __name__ == "__main__":
     app.run(debug=True)
